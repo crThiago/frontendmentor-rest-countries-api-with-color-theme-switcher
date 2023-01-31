@@ -1,5 +1,8 @@
 <template>
   <v-card
+    :to="`/country/1`"
+    link
+    hover
     outlined
   >
     <v-img
