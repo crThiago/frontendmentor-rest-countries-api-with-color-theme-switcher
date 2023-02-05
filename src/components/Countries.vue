@@ -17,12 +17,22 @@
   </v-row>
 
   <v-row>
-    <v-col v-for="(value, key) in [1, 2, 3, 4, 5, 6]" :key="key" cols="12" lg="3">
-      <CountryCard />
+    <v-col v-for="(country, key) in countries" :key="key" cols="12" lg="3">
+      <CountryCard :country="country"/>
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts" setup>
 import CountryCard from "@/components/CountryCard.vue";
+import CountyService from "@/services/CountyService";
+import {onMounted, reactive} from "vue";
+
+const countries: Country[] = reactive([])
+
+onMounted(() => {
+  CountyService.getCountries().then((response) => {
+    countries.push(...response.data.slice(0, 8).map((country: object) => CountyService.formatData(country)));
+  });
+});
 </script>

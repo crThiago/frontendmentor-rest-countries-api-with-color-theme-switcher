@@ -9,21 +9,22 @@
       </v-btn>
     </v-col>
   </v-row>
-  <v-row>
+  <v-row v-if="country.code">
     <v-col cols="12" lg="6">
       <v-img
-        src="https://flagcdn.com/be.svg"
+        :src="country.flag"
+        alt="Flag of {{ country.name.common }}"
       />
     </v-col>
     <v-col cols="12" lg="6">
-      <h1 class="subtitle-1">Belgium</h1>
+      <h1 class="subtitle-1">{{ country.name.common }}</h1>
       <v-row>
         <v-col cols="12" lg="6">
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>
                 <span class="font-weight-bold">Native Name: </span>
-                <span>België</span>
+                <span>{{ country.name.native }}</span>
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -31,7 +32,7 @@
             <v-list-item-content>
               <v-list-item-title>
                 <span class="font-weight-bold">Population: </span>
-                <span>11,589,623</span>
+                <span>{{ country.population }}</span>
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -39,7 +40,7 @@
             <v-list-item-content>
               <v-list-item-title>
                 <span class="font-weight-bold">Region: </span>
-                <span>Europe</span>
+                <span>{{ country.region }}</span>
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -47,7 +48,7 @@
             <v-list-item-content>
               <v-list-item-title>
                 <span class="font-weight-bold">Sub Region: </span>
-                <span>Western Europe</span>
+                <span>{{ country.subregion }}</span>
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -55,7 +56,7 @@
             <v-list-item-content>
               <v-list-item-title>
                 <span class="font-weight-bold">Capital: </span>
-                <span>Brussels</span>
+                <span>{{ country.capital }}</span>
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -65,7 +66,7 @@
             <v-list-item-content>
               <v-list-item-title>
                 <span class="font-weight-bold">Top Level Domain: </span>
-                <span>.be</span>
+                <span>{{ country.topLevelDomain }}</span>
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -73,7 +74,7 @@
             <v-list-item-content>
               <v-list-item-title>
                 <span class="font-weight-bold">Currencies: </span>
-                <span>EUR</span>
+                <span v-for="(currency, key) in country.currencies" :key="key">{{ currency }}</span>
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -81,7 +82,7 @@
             <v-list-item-content>
               <v-list-item-title>
                 <span class="font-weight-bold">Languages: </span>
-                <span>Dutch, French, German</span>
+                <span v-for="(language, key) in country.languages" :key="key">{{ language }}</span>
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -91,10 +92,14 @@
       <v-row>
         <v-col class="d-flex align-center">
           <h2 class="text-body-1">Border Countries: </h2>
-          <v-btn>FRA</v-btn>
-          <v-btn>DEU</v-btn>
-          <v-btn>LUX</v-btn>
-          <v-btn>NLD</v-btn>
+          <v-btn
+            v-for="border in country.borders"
+            :key="border"
+            link
+            :to="`/country/${border}`"
+          >
+            {{ border }}
+          </v-btn>
         </v-col>
       </v-row>
     </v-col>
@@ -102,4 +107,17 @@
 </template>
 
 <script lang="ts" setup>
+import {onMounted, ref} from "vue";
+import CountyService from "@/services/CountyService";
+import {useRoute} from "vue-router";
+import {Ref} from "@vue/reactivity";
+
+const code: string = <string>useRoute().params.code
+const country: Ref<Country> = ref({})
+
+onMounted(() => {
+  CountyService.getCountry(code).then((response: object) => {
+    country.value = CountyService.formatData(response.data)
+  })
+})
 </script>
