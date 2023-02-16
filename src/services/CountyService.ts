@@ -1,4 +1,5 @@
 import axios from "axios";
+import {Ref} from "@vue/reactivity";
 
 class CountyService {
 
@@ -6,8 +7,20 @@ class CountyService {
     return await axios.get('https://restcountries.com/v2/all')
   }
 
+  public async getCountriesByRegion(region: string): Promise<Country[]> {
+    return await axios.get(`https://restcountries.com/v2/region/${region}`)
+  }
+
+  public async getCountriesByName(name: string): Promise<Country[]> {
+    return await axios.get(`https://restcountries.com/v2/name/${name}`)
+  }
+
   public async getCountry(code: string): Promise<Country> {
     return await axios.get(`https://restcountries.com/v2/alpha/${code}`)
+  }
+
+  public sliceMapData(data: object): Country[] {
+    return data.slice(0, 100).map((country: object) => this.formatData(country));
   }
 
   public formatData(data: object): Country {
@@ -23,7 +36,7 @@ class CountyService {
       capital: data.capital,
       topLevelDomain: data.topLevelDomain[0],
       flag: data.flags.svg,
-      currencies: data.currencies.map((currency: object) => currency.name),
+      currencies: data.currencies?.map((currency: object) => currency.name),
       languages: data.languages.map((language: object) => language.name),
       borders: data.borders,
     }
