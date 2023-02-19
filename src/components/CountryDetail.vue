@@ -96,7 +96,7 @@
             v-for="border in country.borders"
             :key="border"
             link
-            :to="`/country/${border}`"
+            @click="changeCountry(border)"
           >
             {{ border }}
           </v-btn>
@@ -111,6 +111,7 @@ import {onMounted, ref} from "vue";
 import CountyService from "@/services/CountyService";
 import {useRoute} from "vue-router";
 import {Ref} from "@vue/reactivity";
+import router from "@/router";
 
 const code: string = <string>useRoute().params.code
 const country: Ref<Country> = ref({})
@@ -120,4 +121,11 @@ onMounted(() => {
     country.value = CountyService.formatData(response.data)
   })
 })
+
+function changeCountry(code: string) {
+  CountyService.getCountry(code).then((response: object) => {
+    country.value = CountyService.formatData(response.data)
+  })
+  router.push({ name: 'Detail', params: { code } })
+}
 </script>

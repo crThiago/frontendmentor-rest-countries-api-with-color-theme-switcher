@@ -2,7 +2,7 @@
   <v-app :theme="theme">
     <default-bar @toggle="toggleTheme"/>
 
-    <default-view />
+    <default-view :class="theme === 'light' ? 'bg-grey-lighten-5' : 'bg-grey-darken-3'" />
   </v-app>
 </template>
 
