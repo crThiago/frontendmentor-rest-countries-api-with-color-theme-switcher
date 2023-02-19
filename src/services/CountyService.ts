@@ -19,8 +19,8 @@ class CountyService {
     return await axios.get(`https://restcountries.com/v2/alpha/${code}`)
   }
 
-  public sliceMapData(data: object): Country[] {
-    return data.slice(0, 100).map((country: object) => this.formatData(country));
+  public mapFormatData(data: object): Country[] {
+    return data.map((country: object) => this.formatData(country));
   }
 
   public formatData(data: object): Country {

@@ -11,8 +11,8 @@
       height="200px"
       cover
     ></v-img>
-    <v-card-title>{{ props.country.name.common }}</v-card-title>
-    <v-card-text>
+    <v-card-title class="pt-5">{{ props.country.name.common }}</v-card-title>
+    <v-card-text class="pb-8">
       <p><strong>Population:</strong> {{ props.country.population }}</p>
       <p><strong>Region:</strong> {{ props.country.region }}</p>
       <p><strong>Capital:</strong> {{ props.country.capital }}</p>

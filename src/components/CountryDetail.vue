@@ -9,7 +9,7 @@
       </v-btn>
     </v-col>
   </v-row>
-  <v-row v-if="country.code">
+  <v-row v-if="country.code" class="mt-10">
     <v-col cols="12" lg="6">
       <v-img
         :src="country.flag"
@@ -89,10 +89,11 @@
         </v-col>
       </v-row>
 
-      <v-row>
-        <v-col class="d-flex align-center">
+      <v-row v-show="country.borders">
+        <v-col class="d-flex flex-wrap align-center">
           <h2 class="text-body-1">Border Countries: </h2>
           <v-btn
+            class="ml-2 mt-2"
             v-for="border in country.borders"
             :key="border"
             link

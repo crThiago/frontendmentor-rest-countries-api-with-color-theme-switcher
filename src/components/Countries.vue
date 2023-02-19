@@ -3,6 +3,7 @@
     <v-col cols="12" lg="5">
       <v-text-field
         v-model="search"
+        :loading="loading"
         prepend-inner-icon="mdi-magnify"
         label="Search for a country..."
         variant="solo"
@@ -22,7 +23,7 @@
   </v-row>
 
   <v-row>
-    <v-col v-for="(country, key) in countries" :key="key" cols="12" lg="3">
+    <v-col v-for="(country, key) in countries" :key="key" cols="12" lg="3" class="mb-10">
       <CountryCard :country="country"/>
     </v-col>
   </v-row>
@@ -41,6 +42,7 @@ const itemsRegion = [
   {title: 'Europe', value: 'Europe'},
   {title: 'Oceania', value: 'Oceania'},
 ];
+const loading: Ref<boolean> = ref(false);
 
 const countries: Ref<Country[]> = ref([])
 onMounted(() => {
@@ -48,15 +50,21 @@ onMounted(() => {
 });
 
 const search: Ref<string> = ref('')
+let timeout: any;
 watch(search, (value) => {
-  countries.value = [];
-  if (value) {
-    CountyService.getCountriesByName(value).then((response) => {
-      countries.value.push(...CountyService.sliceMapData(response.data));
-    });
-  } else {
-    allContries();
-  }
+  loading.value = true;
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    countries.value = [];
+    if (value) {
+      CountyService.getCountriesByName(value).then((response) => {
+        countries.value.push(...CountyService.mapFormatData(response.data));
+      });
+    } else {
+      allContries();
+    }
+    loading.value = false;
+  }, 500);
 })
 
 const region = ref<string>();
@@ -64,7 +72,7 @@ watch(region, (value) => {
   countries.value = [];
   if (value) {
     CountyService.getCountriesByRegion(value).then((response) => {
-      countries.value.push(...CountyService.sliceMapData(response.data));
+      countries.value.push(...CountyService.mapFormatData(response.data));
     });
   } else {
     allContries();
@@ -73,7 +81,7 @@ watch(region, (value) => {
 
 function allContries() {
   CountyService.getCountries().then((response) => {
-    countries.value.push(...CountyService.sliceMapData(response.data));
+    countries.value.push(...CountyService.mapFormatData(response.data));
   });
 }
 </script>

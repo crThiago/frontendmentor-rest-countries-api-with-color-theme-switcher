@@ -2,6 +2,12 @@
   <router-view />
 </template>
 
-<script lang="ts" setup>
-  //
-</script>
+<style>
+  .v-container {
+    max-width: 1440px !important;
+  }
+  .v-toolbar__content {
+    max-width: 1440px !important;
+    margin: 0 auto;
+  }
+</style>
