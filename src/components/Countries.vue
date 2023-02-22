@@ -34,6 +34,7 @@ import CountryCard from "@/components/CountryCard.vue";
 import CountyService from "@/services/CountyService";
 import {onMounted, ref, watch} from "vue";
 import {Ref} from "@vue/reactivity";
+import {Country} from "@/services/Country";
 
 const itemsRegion = [
   {title: 'Africa', value: 'Africa'},
@@ -57,7 +58,7 @@ watch(search, (value) => {
   timeout = setTimeout(() => {
     countries.value = [];
     if (value) {
-      CountyService.getCountriesByName(value).then((response) => {
+      CountyService.getCountriesByName(value).then((response: any) => {
         countries.value.push(...CountyService.mapFormatData(response.data));
       });
     } else {
@@ -71,7 +72,7 @@ const region = ref<string>();
 watch(region, (value) => {
   countries.value = [];
   if (value) {
-    CountyService.getCountriesByRegion(value).then((response) => {
+    CountyService.getCountriesByRegion(value).then((response: any) => {
       countries.value.push(...CountyService.mapFormatData(response.data));
     });
   } else {
@@ -80,7 +81,7 @@ watch(region, (value) => {
 })
 
 function allContries() {
-  CountyService.getCountries().then((response) => {
+  CountyService.getCountries().then((response: any) => {
     countries.value.push(...CountyService.mapFormatData(response.data));
   });
 }

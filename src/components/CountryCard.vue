@@ -21,6 +21,8 @@
 </template>
 
 <script lang="ts" setup>
+import {Country} from "@/services/Country";
+
 const props = defineProps({
   country: {
     type: Object as () => Country,

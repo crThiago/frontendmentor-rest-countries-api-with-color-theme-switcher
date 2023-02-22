@@ -1,5 +1,5 @@
 import axios from "axios";
-import {Ref} from "@vue/reactivity";
+import {Country} from "@/services/Country";
 
 class CountyService {
 
@@ -19,11 +19,11 @@ class CountyService {
     return await axios.get(`https://restcountries.com/v2/alpha/${code}`)
   }
 
-  public mapFormatData(data: object): Country[] {
+  public mapFormatData(data: any): Country[] {
     return data.map((country: object) => this.formatData(country));
   }
 
-  public formatData(data: object): Country {
+  public formatData(data: any): Country {
     return {
       code: data.alpha2Code,
       name: {
@@ -36,8 +36,8 @@ class CountyService {
       capital: data.capital,
       topLevelDomain: data.topLevelDomain[0],
       flag: data.flags.svg,
-      currencies: data.currencies?.map((currency: object) => currency.name),
-      languages: data.languages.map((language: object) => language.name),
+      currencies: data.currencies?.map((currency: any) => currency.name),
+      languages: data.languages.map((language: any) => language.name),
       borders: data.borders,
     }
   }
